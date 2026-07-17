@@ -3,7 +3,7 @@
 ## Example File: `01_HelloWorld.js`
 
 ```js
-console.log("Hello The Testing Academy!");
+console.log("Hello World!");
 ```
 
 ---
@@ -26,7 +26,7 @@ console.log("Hello The Testing Academy!");
 
 ### 1. Source Code — What You Write
 ```js
-console.log("Hello The Testing Academy!");
+console.log("Hello World!");
 ```
 This is plain text stored in `01_HelloWorld.js`. Anyone can read and modify it.
 
@@ -40,7 +40,7 @@ Star r0
 LdaNamedProperty r0, [log]
 Star r1
 LdaSMI [1]            ; argument count
-LdaConstant [0]       ; "Hello The Testing Academy!"
+LdaConstant [0]       ; "Hello World!"
 CallProperty1 r1, r0, [0]
 Return
 ```
@@ -59,7 +59,7 @@ adrp    x0, console_string@PAGE
 add     x0, x0, console_string@PAGEOFF
 bl      _GetProperty
 mov     x19, x0
-adrp    x0, helloworld_string@PAGE          ; "Hello The Testing Academy!"
+adrp    x0, helloworld_string@PAGE          ; "Hello World!"
 add     x0, x0, helloworld_string@PAGEOFF
 bl      _CallJSFunction
 ```
