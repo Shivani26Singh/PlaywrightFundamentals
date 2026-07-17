@@ -1,11 +1,13 @@
-# Learning Playwright Fundamentals 2x
+# Playwright Fundamentals
 
-A hands-on starter project for learning [Playwright](https://playwright.dev/) end-to-end testing with TypeScript. Part of **The Testing Academy** Playwright Fundamentals course.
+End-to-end test automation project using [Playwright](https://playwright.dev/) with TypeScript. Includes a custom real-time HTML reporter, Allure integration, and 23 hands-on test modules.
 
 ## Tech Stack
 
 - [Playwright Test](https://playwright.dev/docs/intro) `^1.61.1`
-- TypeScript / Node.js (`@types/node`)
+- TypeScript / Node.js
+- Custom HTML Reporter (real-time, self-contained)
+- Allure Reporter (legacy)
 
 ## Prerequisites
 
@@ -15,72 +17,112 @@ A hands-on starter project for learning [Playwright](https://playwright.dev/) en
 ## Getting Started
 
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Install Playwright browsers
 npx playwright install
 ```
 
 ## Running Tests
 
 ```bash
-# Run all tests (headless)
+# Run all tests
 npx playwright test
 
-# Run in headed mode (watch the browser)
+# Run in headed mode
 npx playwright test --headed
 
 # Run a single spec
-npx playwright test tests/example.spec.ts
+npx playwright test tests/05A_CustomReporting/248A_custom_reporting.spec.ts
 
-# Run in UI mode (interactive)
+# Run with a specific tag (e.g. @smoke, @P0, @P1)
+npx playwright test --grep "@P0"
+
+# Run in interactive UI mode
 npx playwright test --ui
 
-# Debug a test
+# Debug a failing test
 npx playwright test --debug
 ```
 
-## Viewing the Report
-
-After a run, open the HTML report:
+## Viewing Reports
 
 ```bash
-npx playwright show-report
+# Open the custom HTML report
+npm run open-report
+
+# Or open the latest directly
+start custom-report/index.html    # Windows
+open custom-report/index.html     # macOS
 ```
+
+The custom reporter generates live-updating HTML in `custom-report/` with real-time step tracking, screenshots, videos, traces, console logs, and filtering.
 
 ## Project Structure
 
 ```
 .
-├── tests/                  # Test specs
-│   └── example.spec.ts     # Sample: title check + "Get started" navigation
-├── playwright.config.ts    # Playwright configuration
+├── tests/
+│   ├── 01_Basics/                  # First Playwright scripts
+│   ├── 02_first_tests/             # Core test concepts
+│   ├── 03_Locators_Commands/       # Locator strategies & commands
+│   ├── 04_Session_Storage/         # Storage state & session reuse
+│   ├── 05_Allure_Reporting/        # Allure integration tests
+│   ├── 05A_CustomReporting/        # Custom HTML reporter demo
+│   │   ├── 248A_custom_reporting.spec.ts
+│   │   ├── README.md               # Folder-specific guide
+│   │   ├── Reporter-Comparison.md  # Default vs Allure vs Custom
+│   │   └── Custom-Reporter-Capabilities.md  # Full feature reference
+│   ├── 06_Multiple_Element_/       # Multi-element interactions
+│   ├── 07_WebTables/               # Table handling
+│   ├── 08_Web_Select_Frames_Iframe/ # Dropdowns, frames, iframes
+│   ├── 09_Frame_Iframe/            # Frame/iframe deep dive
+│   ├── 10_Keyboard_Hover_Drag_Drop/ # Advanced interactions
+│   ├── 11_JS_Alerts/               # JavaScript alerts & dialogs
+│   ├── 12_Handle_SVG/              # SVG element handling
+│   ├── 13_Shadow_DOM/              # Shadow DOM traversal
+│   ├── 14_FileUpload/              # File upload workflows
+│   ├── 15_File_Download/           # File download verification
+│   ├── 16_Scroll_toElement/        # Scroll actions
+│   ├── 17_Expect_Assertions/       # Advanced assertions
+│   ├── 18_Test_hooks/              # beforeEach/afterEach patterns
+│   ├── 19_Data_Driven_Testing/     # Parameterized tests
+│   ├── 20_Page_Object_Model/       # POM design pattern
+│   ├── 21_Fixture/                 # Custom fixtures
+│   ├── 22_Misc_Concepts/           # Miscellaneous patterns
+│   ├── 23_Advance_Framework/       # Advanced framework concepts
+│   └── Projects/                   # Project-specific E2E tests
+├── utils/
+│   └── CustomReporter.ts           # Custom real-time HTML reporter
+├── playwright.config.ts            # Playwright configuration
 ├── package.json
-└── .gitignore
+└── custom-report/                  # Generated reports (gitignored)
 ```
-
-## What's Inside
-
-`tests/example.spec.ts` demonstrates two core patterns:
-
-1. **Assertions** — verify the page title matches `/Playwright/`.
-2. **Navigation + role locators** — click the *Get started* link and assert the *Installation* heading is visible.
 
 ## Configuration Highlights
 
 Defined in `playwright.config.ts`:
 
-- `testDir: './tests'` — where specs live
-- `fullyParallel: true` — run test files in parallel
-- `reporter: 'html'` — generate an HTML report
-- Projects for Chromium, Firefox, and WebKit
-- CI-aware retries and workers (`process.env.CI`)
+- `testDir: './tests'` — all specs under `tests/`
+- `fullyParallel: true` — parallel test execution
+- `reporter: [["line"], ["./utils/CustomReporter.ts"]]` — terminal + custom HTML
+- `trace: 'on'`, `video: 'on'`, `screenshot: 'on'` — full artifact capture
+- Chromium project configured (Firefox/WebKit available, commented out)
+
+## Custom Reporter Quick Reference
+
+| Capability | Details |
+|---|---|
+| Output | `custom-report/report_YYYYMMDD_HHMMSS.html` |
+| Live updates | Auto-refreshes every 5 seconds during test run |
+| Steps | Expandable per-step with timing, console logs, screenshots |
+| Filters | Status (passed/failed/skipped) + tags (P0/P1/smoke)|
+| History | `custom-report/history.html` — all past runs |
+| Assets | Screenshots, videos, traces auto-copied to report dir |
+| Author | Defaults to "Shivani Singh" |
+| Environment | Defaults to "QA" (set `TEST_ENV` to override) |
 
 ## Learn More
 
 - [Playwright Docs](https://playwright.dev/docs/intro)
-- [The Testing Academy](https://thetestingacademy.com/)
 
 ## License
 
