@@ -8,6 +8,14 @@ node_modules/
 /playwright/.auth/
 /custom-report/
 /tta-report/
+/allure-results/
+/logs/
+
+# Environment
+.env
+
+# User session
+user-session.json
 
 # Build
 /dist/
