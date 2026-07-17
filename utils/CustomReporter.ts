@@ -792,6 +792,10 @@ class CustomReporter implements Reporter {
                 <label><input type="checkbox" class="status-filter" value="failed" onchange="filterByStatus(this)"><span>❌ Failed</span></label>
                 <label><input type="checkbox" class="status-filter" value="skipped" onchange="filterByStatus(this)"><span>⏭️ Skipped</span></label>
             </div>
+            <div class="filter-group">
+                <button class="collapse-btn" onclick="collapseAllDetails()">⬆ Collapse All</button>
+                <button class="collapse-btn" onclick="expandAllDetails()">⬇ Expand All</button>
+            </div>
         </div>`;
     }
 
@@ -841,14 +845,14 @@ class CustomReporter implements Reporter {
             html += `
                 <tr class="test-row ${statusClass}" data-test-id="${test.id}" data-tags="${tagsData}">
                     <td class="col-sno">${serialNo}</td>
-                    <td class="col-suite">${this.escapeHtml(test.describePath[0] || 'Default')}</td>
+                    <td class="col-suite" title="${this.escapeHtml(test.describePath[0] || 'Default')}">${this.escapeHtml(test.describePath[0] || 'Default')}</td>
                     <td class="col-testname">
-                        <span class="test-name-link" onclick="toggleTestDetail('${test.id}')">${this.escapeHtml(test.title)}</span>
+                        <span class="test-name-link" onclick="toggleTestDetail('${test.id}')" title="${this.escapeHtml(test.title)}">${this.escapeHtml(test.title)}</span>
                     </td>
                     <td class="col-author">${author}</td>
                     <td class="col-group">${this.escapeHtml(testGroup)}</td>
-                    <td class="col-tags">${test.tags.map(t => `<span class="tag">${t}</span>`).join(' ')}</td>
-                    <td class="col-file">${this.escapeHtml(test.location)}</td>
+                    <td class="col-tags" title="${test.tags.join(', ')}">${test.tags.map(t => `<span class="tag">${t}</span>`).join(' ')}</td>
+                    <td class="col-file" title="${this.escapeHtml(test.location)}">${this.escapeHtml(test.location)}</td>
                     <td class="col-starttime">${this.formatTime(testStartTime)}</td>
                     <td class="col-endtime">${this.formatTime(testEndTime)}</td>
                     <td class="col-duration">${duration}</td>
@@ -1318,6 +1322,22 @@ class CustomReporter implements Reporter {
         .filter-group input[type="checkbox"]:checked + span {
             color: var(--primary);
         }
+        .collapse-btn {
+            padding: 8px 18px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            transition: all 0.2s;
+        }
+        .collapse-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
 
         /* ========== TEST TABLE ========== */
         .test-table-container {
@@ -1340,7 +1360,7 @@ class CustomReporter implements Reporter {
             z-index: 10;
         }
         .test-table th {
-            padding: 16px 12px;
+            padding: 10px 6px;
             text-align: left;
             font-weight: 600;
             font-size: 11px;
@@ -1350,7 +1370,7 @@ class CustomReporter implements Reporter {
             white-space: nowrap;
         }
         .test-table td {
-            padding: 14px 12px;
+            padding: 10px 6px;
             border-bottom: 1px solid var(--gray-100);
             vertical-align: middle;
         }
@@ -1377,17 +1397,17 @@ class CustomReporter implements Reporter {
         }
 
         /* Column widths */
-        .col-sno { width: 50px; text-align: center; font-weight: 600; color: var(--gray-400); }
-        .col-suite { min-width: 120px; }
-        .col-testname { min-width: 280px; }
-        .col-author { width: 80px; }
-        .col-group { width: 80px; }
-        .col-tags { min-width: 120px; }
-        .col-file { min-width: 140px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gray-500); }
-        .col-starttime, .col-endtime { width: 160px; font-size: 12px; color: var(--gray-500); }
-        .col-duration { width: 80px; text-align: center; font-weight: 600; }
-        .col-status { width: 100px; text-align: center; }
-        .col-screenshot, .col-video, .col-trace { width: 80px; text-align: center; }
+        .col-sno { width: 36px; text-align: center; font-weight: 600; color: var(--gray-400); font-size: 11px; }
+        .col-suite { max-width: 90px; word-wrap: break-word; font-size: 12px; }
+        .col-testname { min-width: 180px; max-width: 280px; word-wrap: break-word; font-size: 12px; }
+        .col-author { width: 70px; font-size: 12px; }
+        .col-group { width: 55px; text-align: center; font-size: 11px; }
+        .col-tags { max-width: 80px; font-size: 11px; }
+        .col-file { max-width: 90px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gray-500); word-wrap: break-word; }
+        .col-starttime, .col-endtime { width: 130px; font-size: 10px; color: var(--gray-500); white-space: nowrap; }
+        .col-duration { width: 55px; text-align: center; font-weight: 600; font-size: 11px; }
+        .col-status { width: 75px; text-align: center; }
+        .col-screenshot, .col-video, .col-trace { width: 58px; text-align: center; font-size: 11px; }
 
         .test-name-link {
             color: var(--dark);
@@ -1395,6 +1415,8 @@ class CustomReporter implements Reporter {
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s;
+            display: block;
+            word-wrap: break-word;
         }
         .test-name-link:hover {
             color: var(--primary);
@@ -1897,6 +1919,20 @@ class CustomReporter implements Reporter {
                 }
             }
             applyFilters();
+        }
+
+        function collapseAllDetails() {
+            document.querySelectorAll('.test-detail-row').forEach(row => { row.style.display = 'none'; });
+            document.querySelectorAll('.detail-section').forEach(s => s.classList.add('section-collapsed'));
+            document.querySelectorAll('.step-item').forEach(s => s.classList.remove('expanded'));
+            document.querySelectorAll('.step-details').forEach(d => d.style.display = 'none');
+        }
+
+        function expandAllDetails() {
+            document.querySelectorAll('.test-detail-row').forEach(row => { row.style.display = 'table-row'; });
+            document.querySelectorAll('.detail-section').forEach(s => s.classList.remove('section-collapsed'));
+            document.querySelectorAll('.step-item.expandable').forEach(s => s.classList.add('expanded'));
+            document.querySelectorAll('.step-details').forEach(d => d.style.display = 'block');
         }
 
         function applyFilters() {
