@@ -6,18 +6,8 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-/custom-report/*
-!/custom-report/.gitkeep
-!/custom-report/screenshots/
-/custom-report/screenshots/*
-!/custom-report/screenshots/.gitkeep
-!/custom-report/videos/
-/custom-report/videos/*
-!/custom-report/videos/.gitkeep
-!/custom-report/traces/
-/custom-report/traces/*
-!/custom-report/traces/.gitkeep
-/tta-report/**
+/custom-report/
+/tta-report/
 /allure-results/
 /logs/
 
