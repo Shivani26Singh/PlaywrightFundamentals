@@ -19,7 +19,7 @@ test('Verify spicejet From and To dropdown values', async ({ page }) => {
     await delOption.click();
     await expect(fromInputField).toHaveValue('Delhi (DEL)');
 
-    // Click on the "To" input field and search 'ban'
+    // Click on the "To" input field and search 'ban' 
     await toInputField.click();
     await toInputField.fill('');
     await toInputField.fill('ban');
